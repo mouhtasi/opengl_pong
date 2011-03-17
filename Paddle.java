@@ -2,13 +2,13 @@ public class Paddle
 {
 	private Vector2 position = new Vector2();
 	private Color color = new Color();
-	private float speed;
-	private float width;
-	private float height;
+	private double speed;
+	private double width;
+	private double height;
 	private boolean movingUp;
 	private boolean movingDown;
-	private float maxY;
-	private float minY;
+	private double maxY;
+	private double minY;
 
 	/**Create a Paddle object.**/
 	public Paddle()
@@ -16,7 +16,7 @@ public class Paddle
 	}
 
 	/**Set the coordinates to x, y.**/
-	public void setPosition(float x, float y)
+	public void setPosition(double x, double y)
 	{
 		position.set(x, y);
 	}
@@ -39,20 +39,20 @@ public class Paddle
 		color.set(c);
 	}
 
-	/**Set the speed to floiat speed.**/
-	public void setSpeed(float speed)
+	/**Set the speed to double speed.**/
+	public void setSpeed(double speed)
 	{
 		this.speed = speed;
 	}
 
-	/**Set the width to float width.**/
-	public void setWidth(float width)
+	/**Set the width to double width.**/
+	public void setWidth(double width)
 	{
 		this.width = width;
 	}
 
-	/**Set the height to float height.**/
-	public void setHeight(float height)
+	/**Set the height to double height.**/
+	public void setHeight(double height)
 	{
 		this.height = height;
 	}
@@ -70,19 +70,19 @@ public class Paddle
 	}
 
 	/**Return the speed.**/
-	public float getSpeed()
+	public double getSpeed()
 	{
 		return speed;
 	}
 
 	/**return the width.**/
-	public float getWidth()
+	public double getWidth()
 	{
 		return width;
 	}
 
 	/**Return the height.**/
-	public float getHeight()
+	public double getHeight()
 	{
 		return height;
 	}
@@ -128,14 +128,14 @@ public class Paddle
 	}
 
 	/**Set the max and min bounds.**/
-	public void setBounds(float min, float max)
+	public void setBounds(double min, double max)
 	{
 		minY = min;
 		maxY = max;
 	}
 
 	/**Update the data  for the paddle.**/
-	public void update(float deltaTime)
+	public void update(double deltaTime)
 	{
 		if(movingUp)
 		{

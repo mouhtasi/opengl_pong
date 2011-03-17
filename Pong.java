@@ -17,9 +17,9 @@ public class Pong implements GLEventListener, KeyListener
 	private static final int SCREEN_WIDTH = 800;
 	private static final int SCREEN_HEIGHT = 600;
 	private static final int FPS = 120;              //frames per second
-	private static final float PADDLE_SPEED = 400;   //default paddle speed
+	private static final double PADDLE_SPEED = 400;   //default paddle speed
 	private static final int MAX_SCORE = 10;         //game restarts when either player reaches this score
-	private static final float READY_TIME = 1.0f;
+	private static final double READY_TIME = 1.0;
 	private static final int BALL_RADIUS = 5;        //radius of the ball
 
 	// static vars
@@ -28,15 +28,15 @@ public class Pong implements GLEventListener, KeyListener
 	private static FPSAnimator animator;
 	private static GLU glu;
 	private static Frame frame;
-	private static float AI_UPDATE_TIME = 1.5f;
-	private static float BALL_SPEED = 300;    //default ball speed
+	private static double AI_UPDATE_TIME = 1.5;
+	private static double BALL_SPEED = 300;    //default ball speed
 
 	// instance vars
-	private float gameTime;     // sec
-	private float frameTime;    // sec
+	private double gameTime;     // sec
+	private double frameTime;    // sec
 	private long prevTime;      // nano sec
-	private float aiTime;
-	private float readyTime;
+	private double aiTime;
+	private double readyTime;
 
 	private int screenWidth;
 	private int screenHeight;
@@ -76,13 +76,13 @@ public class Pong implements GLEventListener, KeyListener
 	{
 		// ball
 		ball = new Ball();
-		ball.setPosition(SCREEN_WIDTH/2.0f, SCREEN_HEIGHT/2.0f);
+		ball.setPosition(SCREEN_WIDTH/2.0, SCREEN_HEIGHT/2.0);
 		ball.setRadius(BALL_RADIUS);
 		ball.setColor(0.2f, 1, 0.2f);    //color green
 
 		// paddle for player
 		player = new Paddle();
-		player.setPosition(10.0f, SCREEN_HEIGHT/2.0f);
+		player.setPosition(10.0, SCREEN_HEIGHT/2.0);
 		player.setWidth(10);
 		player.setHeight(70);
 		player.setColor(1, 0.2f, 0.2f);    //color red
@@ -91,7 +91,7 @@ public class Pong implements GLEventListener, KeyListener
 
 		// paddle for computer
 		computer = new Paddle();
-		computer.setPosition(SCREEN_WIDTH-10.0f, SCREEN_HEIGHT/2.0f);
+		computer.setPosition(SCREEN_WIDTH-10.0, SCREEN_HEIGHT/2.0);
 		computer.setWidth(10);
 		computer.setHeight(70);
 		computer.setColor(0.2f, 0.2f, 1);    //color blue
@@ -149,10 +149,10 @@ public class Pong implements GLEventListener, KeyListener
 	}
 
 	/**Return the frame time in seconds.**/
-	private float getFrameTime()
+	private double getFrameTime()
 	{
 		long currTime = System.nanoTime();
-		float deltaTime = (float)((currTime - prevTime) / 1000000000.0); //nanosec to sec
+		double deltaTime = (currTime - prevTime) / 1000000000.0; //nanosec to sec
 		prevTime = currTime;
 		return deltaTime;
 	}
@@ -163,7 +163,7 @@ public class Pong implements GLEventListener, KeyListener
 		gameState = state;
 		if(state == GameState.START){
 			playerScore = computerScore = 0;
-			AI_UPDATE_TIME = 1.0f;    //reset AI
+			AI_UPDATE_TIME = 1.0;    //reset AI
 			BALL_SPEED = 300;    //reset ball speed
 			ball.setPosition(SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
 			ball.setVelocity(0, 0);
@@ -202,7 +202,7 @@ public class Pong implements GLEventListener, KeyListener
 				setGameState(GameState.MENU);
 			}else{
 				//shoot the next ball
-				AI_UPDATE_TIME *= 0.5f;     //increase refresh speed of AI
+				AI_UPDATE_TIME *= 0.5;     //increase refresh speed of AI
 				BALL_SPEED += 20;			//increase speed of ball
 				setGameState(GameState.READY);
 			}
@@ -220,9 +220,9 @@ public class Pong implements GLEventListener, KeyListener
 		computer.setMovingUp(false);
 		aiTime = 0;
 
-		float ballY = ball.getPosition().y;
-		float paddleY = computer.getPosition().y;
-		float offset = computer.getHeight() / 2.0f;
+		double ballY = ball.getPosition().y;
+		double paddleY = computer.getPosition().y;
+		double offset = computer.getHeight() / 2.0;
 
 		if(ballY > (paddleY + offset))
 			computer.setMovingUp(true);
@@ -236,7 +236,7 @@ public class Pong implements GLEventListener, KeyListener
 		int hit = 0;
 		Vector2 pos = ball.getPosition();
 		Vector2 vel = ball.getVelocity();
-		float rad = ball.getRadius();
+		double rad = ball.getRadius();
 
 		// testing with wall
 		if(pos.y < 0) // hit bottom wall
@@ -255,7 +255,7 @@ public class Pong implements GLEventListener, KeyListener
 		// testing with paddles
 		Vector2 left = player.getPosition();    // left paddle
 		Vector2 right = computer.getPosition(); // right paddle
-		float offset = player.getHeight() / 2.0f;
+		double offset = player.getHeight() / 2.0;
 
 		// test with left paddle
 		if(pos.x + rad < 0)
@@ -322,32 +322,32 @@ public class Pong implements GLEventListener, KeyListener
 	private Vector2 english(Vector2 vec)
 	{
 		Vector2 newVec = new Vector2(vec);
-		float length = vec.getLength();
+		double length = vec.getLength();
 
 		if(vec.x < 0) {
 			if(player.isMovingUp()) {
 				newVec.normalize();
-				if(vec.y > 0)      newVec.y *= 2.0f;
-				else if(vec.y < 0) newVec.y *= 0.5f;
+				if(vec.y > 0)      newVec.y *= 2.0;
+				else if(vec.y < 0) newVec.y *= 0.5;
 				newVec.scale(length);
 			}
 			else if(player.isMovingDown()) {
 				newVec.normalize();
-				if(vec.y > 0)      newVec.y *= 0.5f;
-				else if(vec.y < 0) newVec.y *= 2.0f;
+				if(vec.y > 0)      newVec.y *= 0.5;
+				else if(vec.y < 0) newVec.y *= 2.0;
 				newVec.scale(length);
 			}
 		}else { // for computer paddle side
 			if(computer.isMovingUp()) {
 				newVec.normalize();
-				if(vec.y > 0)      newVec.y *= 2.0f;
-				else if(vec.y < 0) newVec.y *= 0.5f;
+				if(vec.y > 0)      newVec.y *= 2.0;
+				else if(vec.y < 0) newVec.y *= 0.5;
 				newVec.scale(length);
 			}
 			else if(computer.isMovingDown()) {
 				newVec.normalize();
-				if(vec.y > 0)      newVec.y *= 0.5f;
-				else if(vec.y < 0) newVec.y *= 2.0f;
+				if(vec.y > 0)      newVec.y *= 0.5;
+				else if(vec.y < 0) newVec.y *= 2.0;
 				newVec.scale(length);
 			}
 		}
@@ -359,15 +359,15 @@ public class Pong implements GLEventListener, KeyListener
 	{
 		// get position and color of ball
 		Vector2 center = ball.getPosition();
-		float radius = ball.getRadius();
+		double radius = ball.getRadius();
 		Color color = ball.getColor();
 
 		// draw 360 triangles
 		gl.glColor3f(color.red, color.green, color.blue);
 		gl.glBegin(GL.GL_TRIANGLE_FAN);
-		gl.glVertex2f(center.x, center.y);
+		gl.glVertex2d(center.x, center.y);
 		for(int angle = 0; angle < 360; angle++){
-			gl.glVertex2f(center.x + (float)Math.sin(angle) * radius, center.y + (float)Math.cos(angle) * radius);
+			gl.glVertex2d(center.x + Math.sin(angle) * radius, center.y + Math.cos(angle) * radius);
 		}
 		gl.glEnd();
 	}
@@ -377,19 +377,19 @@ public class Pong implements GLEventListener, KeyListener
 	{
 		// get position and color
 		Vector2 center = p.getPosition();
-		float offsetX = p.getWidth() / 2.0f;
-		float offsetY = p.getHeight() / 2.0f;
+		double offsetX = p.getWidth() / 2.0;
+		double offsetY = p.getHeight() / 2.0;
 		Color color = p.getColor();
 
 		// draw player's paddle
 		gl.glColor3f(color.red, color.green, color.blue);
 		gl.glBegin(GL.GL_TRIANGLES);
-		gl.glVertex2f(center.x - offsetX, center.y - offsetY);
-		gl.glVertex2f(center.x + offsetX, center.y - offsetY);
-		gl.glVertex2f(center.x + offsetX, center.y + offsetY);
-		gl.glVertex2f(center.x - offsetX, center.y - offsetY);
-		gl.glVertex2f(center.x + offsetX, center.y + offsetY);
-		gl.glVertex2f(center.x - offsetX, center.y + offsetY);
+		gl.glVertex2d(center.x - offsetX, center.y - offsetY);
+		gl.glVertex2d(center.x + offsetX, center.y - offsetY);
+		gl.glVertex2d(center.x + offsetX, center.y + offsetY);
+		gl.glVertex2d(center.x - offsetX, center.y - offsetY);
+		gl.glVertex2d(center.x + offsetX, center.y + offsetY);
+		gl.glVertex2d(center.x - offsetX, center.y + offsetY);
 		gl.glEnd();
 	}
 

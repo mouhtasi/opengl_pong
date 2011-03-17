@@ -3,12 +3,12 @@ public class Ball
 	private Vector2 position = new Vector2();
 	private Vector2 velocity = new Vector2();
 	private Color color = new Color();
-	private float radius;
+	private double radius;
 
 	/**Create a Ball object with radius of 1.**/
 	public Ball()
 	{
-		radius = 1.0f;
+		radius = 1.0;
 	}
 
 	/**Return the position of the ball.**/
@@ -30,19 +30,19 @@ public class Ball
 	}
 
 	/**Return the radius of the ball.**/
-	public float getRadius()
+	public double getRadius()
 	{
 		return radius;
 	}
 
-	/**Set the position of the ball to floats x and y.**/
-	public void setPosition(float x, float y)
+	/**Set the position of the ball to doubles x and y.**/
+	public void setPosition(double x, double y)
 	{
 		position.set(x, y);
 	}
 
 	/**Set the velocity of the ball.**/
-	public void setVelocity(float x, float y)
+	public void setVelocity(double x, double y)
 	{
 		velocity.set(x, y);
 	}
@@ -54,7 +54,7 @@ public class Ball
 	}
 
 	/**Set the radius of the ball.**/
-	public void setRadius(float radius)
+	public void setRadius(double radius)
 	{
 		this.radius = radius;
 	}
@@ -76,14 +76,14 @@ public class Ball
 
 	/**Fire the ball from it's current position at the given speed.
 	Will either shoot towards the player or the computer.**/
-	public void fire(float x,float y, float speed)
+	public void fire(double x, double y, double speed)
 	{
 		position.x = x;
 		position.y = y;
 
-		if((float)Math.random() * 2 < 1.0f) velocity.x = -(float)(Math.random()* 0.5 + 0.5);
-		else velocity.x = (float)(Math.random()* 0.5 + 0.5);
-		velocity.y = (float)(Math.random()* 2 - 1);
+		if(Math.random() * 2 < 1.0) velocity.x = -(Math.random()* 0.5 + 0.5);
+		else velocity.x = Math.random()* 0.5 + 0.5;
+		velocity.y = Math.random()* 2 - 1;
 
 
 		velocity.normalize();
@@ -91,7 +91,7 @@ public class Ball
 	}
 
 	/**Update the ball.**/
-	public void update(float frameTime)
+	public void update(double frameTime)
 	{
 		position.x += velocity.x * frameTime;
 		position.y += velocity.y * frameTime;

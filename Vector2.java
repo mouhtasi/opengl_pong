@@ -1,7 +1,7 @@
 public class Vector2
 {
-	public float x;
-	public float y;
+	public double x;
+	public double y;
 
 	/**Create a Vector2 object with coordinates 0, 0.**/
 	public Vector2()
@@ -10,7 +10,7 @@ public class Vector2
 	}
 
 	/**Create a Vector2 object with coordinates x, y.**/
-	public Vector2(float x, float y)
+	public Vector2(double x, double y)
 	{
 		this.set(x, y);
 	}
@@ -22,7 +22,7 @@ public class Vector2
 	}
 
 	/**Set the coordinates to x, y.**/
-	public void set(float x, float y)
+	public void set(double x, double y)
 	{
 		this.x = x;
 		this.y = y;
@@ -64,7 +64,7 @@ public class Vector2
 	}
 
 	/**Return a vector that has been scaled to 'scalar'.**/
-	public Vector2 scale(float scalar)
+	public Vector2 scale(double scalar)
 	{
 		x *= scalar;
 		y *= scalar;
@@ -72,31 +72,31 @@ public class Vector2
 	}
 
 	/**Return the dot product of coordinates for Vector2 object rhs.**/
-	public float dotProduct(Vector2 rhs)
+	public double dotProduct(Vector2 rhs)
 	{
 		return x * rhs.x + y * rhs.y;
 	}
 
 	/**Return the length of the vector.**/
-	public float getLength()
+	public double getLength()
 	{
-		return (float)(Math.hypot(x, y));
+		return Math.hypot(x, y);
 	}
 
 	/**Return a Vector2 object that has been normalized to unit length.**/
 	public Vector2 normalize()
 	{
-		float xx = (float)(x/Math.hypot(x, y));
-		float yy = (float)(y/Math.hypot(x, y));
+		double xx = x/Math.hypot(x, y);
+		double yy = y/Math.hypot(x, y);
 		this.x = xx;
 		this.y = yy;
 		return new Vector2(x, y);
 	}
 
 	/**Return the distance between two vectors.**/
-	public float getDistance(Vector2 rhs)
+	public double getDistance(Vector2 rhs)
 	{
-		return (float)(Math.hypot(rhs.x - this.x, rhs.y - this.y));
+		return Math.hypot(rhs.x - this.x, rhs.y - this.y);
 	}
 
 	public Vector2 get()
