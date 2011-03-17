@@ -86,10 +86,9 @@ public class Vector2
 	/**Normalize this vector.**/
 	public void normalize()
 	{
-		double xx = x/Math.hypot(x, y);
-		double yy = y/Math.hypot(x, y);
-		this.x = xx;
-		this.y = yy;
+		double norm = Math.hypot(x, y);
+		this.x /= norm;
+		this.y /= norm;
 	}
 
 	/**Return the distance between two vectors.**/
