@@ -83,14 +83,13 @@ public class Vector2
 		return Math.hypot(x, y);
 	}
 
-	/**Return a Vector2 object that has been normalized to unit length.**/
-	public Vector2 normalize()
+	/**Normalize this vector.**/
+	public void normalize()
 	{
 		double xx = x/Math.hypot(x, y);
 		double yy = y/Math.hypot(x, y);
 		this.x = xx;
 		this.y = yy;
-		return new Vector2(x, y);
 	}
 
 	/**Return the distance between two vectors.**/
