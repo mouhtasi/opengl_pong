@@ -1,13 +1,13 @@
 public class Vector2
 {
-    public float x;
-    public float y;
+	public float x;
+	public float y;
 
 	/**Create a Vector2 object with coordinates 0, 0.**/
-    public Vector2()
-    {
-        this.set(0, 0);
-    }
+	public Vector2()
+	{
+		this.set(0, 0);
+	}
 
 	/**Create a Vector2 object with coordinates x, y.**/
 	public Vector2(float x, float y){
@@ -18,7 +18,7 @@ public class Vector2
 	public Vector2(Vector2 vec){
 		this(vec.x, vec.y);
 	}
-	
+
 	/**Set the coordinates to x, y.**/
 	public void set(float x, float y){
 		this.x = x;
@@ -30,26 +30,26 @@ public class Vector2
 		x = vec.x;
 		y = vec.y;
 	}
-	
+
 	/**Override the String formatting.**/
 	public String toString(){
 		return String.format("Vector2(x=%f, y=%f)", x, y);
 	}
-	
+
 	/**Print the coordinates of a Vector2 object.**/
-    public void printSelf()
-    {
-        System.out.println(this);
-    }
-	
+	public void printSelf()
+	{
+		System.out.println(this);
+	}
+
 	/**Return a vector that is the sum of two vectors.**/
-    public Vector2 add(Vector2 rhs)
-    {
-        x += rhs.x;
-        y += rhs.y;
-        return new Vector2(this);
-    }
-	
+	public Vector2 add(Vector2 rhs)
+	{
+		x += rhs.x;
+		y += rhs.y;
+		return new Vector2(this);
+	}
+
 	/**Return a vector that is the difference between two vectors.**/
 	public Vector2 subtract(Vector2 rhs){
 		x -= rhs.x;

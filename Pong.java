@@ -13,183 +13,183 @@ import java.lang.Math;
 
 public class Pong implements GLEventListener, KeyListener
 {
-    // constants
-    private static final int SCREEN_WIDTH = 800;
-    private static final int SCREEN_HEIGHT = 600;
-    private static final int FPS = 120;              //frames per second
+	// constants
+	private static final int SCREEN_WIDTH = 800;
+	private static final int SCREEN_HEIGHT = 600;
+	private static final int FPS = 120;              //frames per second
 	private static final float PADDLE_SPEED = 400;   //default paddle speed
 	private static final int MAX_SCORE = 10;         //game restarts when either player reaches this score
 	private static final float READY_TIME = 1.0f;
 	private static final int BALL_RADIUS = 5;        //radius of the ball
-	
-    // static vars
-    private static GLCanvas canvas;
-    //private static Animator animator;
-    private static FPSAnimator animator;
-    private static GLU glu;
-    private static Frame frame;
+
+	// static vars
+	private static GLCanvas canvas;
+	//private static Animator animator;
+	private static FPSAnimator animator;
+	private static GLU glu;
+	private static Frame frame;
 	private static float AI_UPDATE_TIME = 1.5f;
 	private static float BALL_SPEED = 300;    //default ball speed
 
-    // instance vars
-    private float gameTime;     // sec
-    private float frameTime;    // sec
-    private long prevTime;      // nano sec
+	// instance vars
+	private float gameTime;     // sec
+	private float frameTime;    // sec
+	private long prevTime;      // nano sec
 	private float aiTime;
 	private float readyTime;
 
-    private int screenWidth;
-    private int screenHeight;
+	private int screenWidth;
+	private int screenHeight;
 
-    private Ball ball;
-    private Paddle player;
-    private Paddle computer;
+	private Ball ball;
+	private Paddle player;
+	private Paddle computer;
 
-    private TextRenderer textRenderer;
+	private TextRenderer textRenderer;
 	private SoundPlayer sound = new SoundPlayer(); /// for sound effects
 	private int playerScore = 0;
 	private int computerScore = 0;
-	
+
 	public enum GameState { MENU, START, READY, GAME }
 	private GameState gameState = GameState.MENU;
 
-    public static void main(String[] args)
-    {
-        Pong pong = new Pong();
-    }
-	
+	public static void main(String[] args)
+	{
+		Pong pong = new Pong();
+	}
+
 	/**Start a new game of Pong.**/
-    public Pong()
-    {
-        System.out.println("Starting Pong...");
+	public Pong()
+	{
+		System.out.println("Starting Pong...");
 
-        initPong();
-        initJOGL();
+		initPong();
+		initJOGL();
 
-        // reset timer
-        prevTime = System.nanoTime();
-        gameTime = frameTime = 0;
-    }
+		// reset timer
+		prevTime = System.nanoTime();
+		gameTime = frameTime = 0;
+	}
 
 	/**Initialize the ball and paddles.**/
-    private void initPong()
-    {
-        // ball
-        ball = new Ball();
-        ball.setPosition(SCREEN_WIDTH/2.0f, SCREEN_HEIGHT/2.0f);
-        ball.setRadius(BALL_RADIUS);
-        ball.setColor(0.2f, 1, 0.2f);    //color green
+	private void initPong()
+	{
+		// ball
+		ball = new Ball();
+		ball.setPosition(SCREEN_WIDTH/2.0f, SCREEN_HEIGHT/2.0f);
+		ball.setRadius(BALL_RADIUS);
+		ball.setColor(0.2f, 1, 0.2f);    //color green
 
-        // paddle for player
-        player = new Paddle();
-        player.setPosition(10.0f, SCREEN_HEIGHT/2.0f);
-        player.setWidth(10);
-        player.setHeight(70);
-        player.setColor(1, 0.2f, 0.2f);    //color red
+		// paddle for player
+		player = new Paddle();
+		player.setPosition(10.0f, SCREEN_HEIGHT/2.0f);
+		player.setWidth(10);
+		player.setHeight(70);
+		player.setColor(1, 0.2f, 0.2f);    //color red
 		player.setSpeed(PADDLE_SPEED);
 		player.setBounds(player.getHeight()/2, SCREEN_HEIGHT - player.getHeight()/2);
-        
+
 		// paddle for computer
-        computer = new Paddle();
-        computer.setPosition(SCREEN_WIDTH-10.0f, SCREEN_HEIGHT/2.0f);
-        computer.setWidth(10);
-        computer.setHeight(70);
-        computer.setColor(0.2f, 0.2f, 1);    //color blue
-        computer.setSpeed(PADDLE_SPEED);
-        computer.setBounds(player.getHeight()/2, SCREEN_HEIGHT - computer.getHeight()/2);
-    }
+		computer = new Paddle();
+		computer.setPosition(SCREEN_WIDTH-10.0f, SCREEN_HEIGHT/2.0f);
+		computer.setWidth(10);
+		computer.setHeight(70);
+		computer.setColor(0.2f, 0.2f, 1);    //color blue
+		computer.setSpeed(PADDLE_SPEED);
+		computer.setBounds(player.getHeight()/2, SCREEN_HEIGHT - computer.getHeight()/2);
+	}
 
-    /**Initialize JOGL.**/
-    private void initJOGL()
-    {
-        // OpenGL capabilities
-        GLCapabilities caps = new GLCapabilities(GLProfile.getDefault());
-        caps.setDoubleBuffered(true);
-        caps.setHardwareAccelerated(true);
+	/**Initialize JOGL.**/
+	private void initJOGL()
+	{
+		// OpenGL capabilities
+		GLCapabilities caps = new GLCapabilities(GLProfile.getDefault());
+		caps.setDoubleBuffered(true);
+		caps.setHardwareAccelerated(true);
 
-        // create objects
-        frame = new Frame("Pong");
-        canvas = new GLCanvas(caps);
-        //animator = new Animator(canvas);
-        animator = new FPSAnimator(canvas, FPS);
+		// create objects
+		frame = new Frame("Pong");
+		canvas = new GLCanvas(caps);
+		//animator = new Animator(canvas);
+		animator = new FPSAnimator(canvas, FPS);
 
-        // config frame
-        frame.add(canvas);
-        frame.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
-        frame.setLocation(100, 100);
-        frame.addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent e) {
-                exit();
-            }
-        });
-        frame.setVisible(true);
+		// config frame
+		frame.add(canvas);
+		frame.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
+		frame.setLocation(100, 100);
+		frame.addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent e) {
+				exit();
+			}
+		});
+		frame.setVisible(true);
 
-        //config canvas
-        canvas.addGLEventListener(this);
-        canvas.requestFocus();
+		//config canvas
+		canvas.addGLEventListener(this);
+		canvas.requestFocus();
 
-        //create a text renderer
-        textRenderer = new TextRenderer(new Font("Dialog", Font.BOLD, 60));
+		//create a text renderer
+		textRenderer = new TextRenderer(new Font("Dialog", Font.BOLD, 60));
 
-        //start animator
-        animator.start();
+		//start animator
+		animator.start();
 
-        //debug
-        System.out.println("Initialized JOGL.");
-    }
+		//debug
+		System.out.println("Initialized JOGL.");
+	}
 
-    /**Terminate game.**/
-    public static void exit()
-    {
-        animator.stop();
-        frame.dispose();
+	/**Terminate game.**/
+	public static void exit()
+	{
+		animator.stop();
+		frame.dispose();
 
-        System.out.println("Pong is terminated.");
-        System.exit(0);
-    }
+		System.out.println("Pong is terminated.");
+		System.exit(0);
+	}
 
-    /**Return the frame time in seconds.**/
-    private float getFrameTime()
-    {
-        long currTime = System.nanoTime();
-        float deltaTime = (float)((currTime - prevTime) / 1000000000.0); //nanosec to sec
-        prevTime = currTime;
-        return deltaTime;
-    }
-	
+	/**Return the frame time in seconds.**/
+	private float getFrameTime()
+	{
+		long currTime = System.nanoTime();
+		float deltaTime = (float)((currTime - prevTime) / 1000000000.0); //nanosec to sec
+		prevTime = currTime;
+		return deltaTime;
+	}
+
 	/**Set the state of the game.**/
 	private void setGameState(GameState state)
-    {
-        gameState = state;
-        if(state == GameState.START){
-            playerScore = computerScore = 0;
+	{
+		gameState = state;
+		if(state == GameState.START){
+			playerScore = computerScore = 0;
 			AI_UPDATE_TIME = 1.0f;    //reset AI
 			BALL_SPEED = 300;    //reset ball speed
-            ball.setPosition(SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
-            ball.setVelocity(0, 0);
-            setGameState(GameState.READY);
-        }else if(state == GameState.READY){
-            readyTime = 0;  // reset ready timer
-        }else if(state == GameState.GAME){
-            ball.fire(SCREEN_WIDTH/2, SCREEN_HEIGHT/2, BALL_SPEED);
-        }
-    }
+			ball.setPosition(SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
+			ball.setVelocity(0, 0);
+			setGameState(GameState.READY);
+		}else if(state == GameState.READY){
+			readyTime = 0;  // reset ready timer
+		}else if(state == GameState.GAME){
+			ball.fire(SCREEN_WIDTH/2, SCREEN_HEIGHT/2, BALL_SPEED);
+		}
+	}
 
 	/**Update the frame.**/
-    private void update()
-    {
-	    if(gameState == GameState.MENU) return;
-        else if(gameState == GameState.READY){
-            readyTime += frameTime;
-            if(readyTime > READY_TIME)
-                setGameState(GameState.GAME);
-            return;
-        }
+	private void update()
+	{
+		if(gameState == GameState.MENU) return;
+		else if(gameState == GameState.READY){
+			readyTime += frameTime;
+			if(readyTime > READY_TIME)
+				setGameState(GameState.GAME);
+			return;
+		}
 
 		//System.out.println(frameTime);
 		ball.update(frameTime);        //updates the ball
-	    player.update(frameTime);      //updates the player paddle
-	    computer.update(frameTime);    //updates the computer paddle
+		player.update(frameTime);      //updates the player paddle
+		computer.update(frameTime);    //updates the computer paddle
 		updateAI();                    //updates the AI
 
 		int hit = hitTest();
@@ -198,17 +198,17 @@ public class Pong implements GLEventListener, KeyListener
 		else if(hit == 3){
 			sound.play("blip03.wav");
 			if(playerScore >= MAX_SCORE || computerScore >= MAX_SCORE){
-                //game ends when either player reaches MAX_SCORE
-                setGameState(GameState.MENU);
-            }else{
-                //shoot the next ball
+				//game ends when either player reaches MAX_SCORE
+				setGameState(GameState.MENU);
+			}else{
+				//shoot the next ball
 				AI_UPDATE_TIME *= 0.5f;     //increase refresh speed of AI
 				BALL_SPEED += 20;			//increase speed of ball
-                setGameState(GameState.READY);
-            }
+				setGameState(GameState.READY);
+			}
 		}
-    }
-	
+	}
+
 	/**Computer AI.**/
 	private void updateAI()
 	{
@@ -232,91 +232,91 @@ public class Pong implements GLEventListener, KeyListener
 
 	/**Return 1 if ball hits wall, 2 if it hits paddle, 3 if it goes behind paddle.**/
 	private int hitTest()
-    {
-        int hit = 0;
-        Vector2 pos = ball.getPosition();
-        Vector2 vel = ball.getVelocity();
+	{
+		int hit = 0;
+		Vector2 pos = ball.getPosition();
+		Vector2 vel = ball.getVelocity();
 		float rad = ball.getRadius();
 
-        // testing with wall
-        if(pos.y < 0) // hit bottom wall
-        {
-            ball.setPosition(pos.x, 0);
-            ball.setVelocity(vel.x, -vel.y);
-            hit = 1;
-        }
-        else if(pos.y > SCREEN_HEIGHT) // hit top wall
-        {
-            ball.setPosition(pos.x, SCREEN_HEIGHT);
-            ball.setVelocity(vel.x, -vel.y);
-            hit = 1;
-        }
+		// testing with wall
+		if(pos.y < 0) // hit bottom wall
+		{
+			ball.setPosition(pos.x, 0);
+			ball.setVelocity(vel.x, -vel.y);
+			hit = 1;
+		}
+		else if(pos.y > SCREEN_HEIGHT) // hit top wall
+		{
+			ball.setPosition(pos.x, SCREEN_HEIGHT);
+			ball.setVelocity(vel.x, -vel.y);
+			hit = 1;
+		}
 
-        // testing with paddles
-        Vector2 left = player.getPosition();    // left paddle
-        Vector2 right = computer.getPosition(); // right paddle
-        float offset = player.getHeight() / 2.0f;
+		// testing with paddles
+		Vector2 left = player.getPosition();    // left paddle
+		Vector2 right = computer.getPosition(); // right paddle
+		float offset = player.getHeight() / 2.0f;
 
-        // test with left paddle
-        if(pos.x + rad < 0)
-        {
-            computerScore++;
-            hit = 3;
-        }
-        else if(pos.x < left.x)
-        {
-            if(pos.y > (left.y - offset) && pos.y < (left.y + offset))
-            {
-                ball.setPosition(left.x, pos.y);
+		// test with left paddle
+		if(pos.x + rad < 0)
+		{
+			computerScore++;
+			hit = 3;
+		}
+		else if(pos.x < left.x)
+		{
+			if(pos.y > (left.y - offset) && pos.y < (left.y + offset))
+			{
+				ball.setPosition(left.x, pos.y);
 				vel = english(vel);
-                ball.setVelocity(-vel.x, vel.y);
-                hit = 2;
-            }
-        }
+				ball.setVelocity(-vel.x, vel.y);
+				hit = 2;
+			}
+		}
 
-        // continue hitTest() for right paddle 
-        else if(pos.x - rad > SCREEN_WIDTH)
-        {
-            playerScore++;
-            hit = 3;
-        }
-        else if(pos.x > right.x)
-        {
-            if(pos.y > (right.y-offset) && pos.y < (right.y+offset))
-            {
-                ball.setPosition(right.x, pos.y);
+		// continue hitTest() for right paddle 
+		else if(pos.x - rad > SCREEN_WIDTH)
+		{
+			playerScore++;
+			hit = 3;
+		}
+		else if(pos.x > right.x)
+		{
+			if(pos.y > (right.y-offset) && pos.y < (right.y+offset))
+			{
+				ball.setPosition(right.x, pos.y);
 				vel = english(vel);
-                ball.setVelocity(-vel.x, vel.y);
-                hit = 2;
-            }
-        }
+				ball.setVelocity(-vel.x, vel.y);
+				hit = 2;
+			}
+		}
 
-        return hit;
-    }
+		return hit;
+	}
 
-    /**Draw the frame.**/
-    private void drawFrame(GLAutoDrawable drawable)
-    {
-        final GL2 gl = drawable.getGL().getGL2();
+	/**Draw the frame.**/
+	private void drawFrame(GLAutoDrawable drawable)
+	{
+		final GL2 gl = drawable.getGL().getGL2();
 
-        // clear screen
-        gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
+		// clear screen
+		gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
 
-        gl.glLoadIdentity();
+		gl.glLoadIdentity();
 
-        // draw scene
-        drawBackground(gl);
-        drawPaddles(gl, player);    //draw player paddle
+		// draw scene
+		drawBackground(gl);
+		drawPaddles(gl, player);    //draw player paddle
 		drawPaddles(gl, computer);  //draw computer paddle
-        drawBall(gl);
+		drawBall(gl);
 
-        // draw text
-        drawScores();
-        drawMessage();
+		// draw text
+		drawScores();
+		drawMessage();
 
-        // tell OpenGL ready to draw
-        gl.glFlush();
-    }
+		// tell OpenGL ready to draw
+		gl.glFlush();
+	}
 
 	/**Return vector that is angled depending on the directon of movement of the paddle.**/
 	private Vector2 english(Vector2 vec)
@@ -338,96 +338,96 @@ public class Pong implements GLEventListener, KeyListener
 				newVec.scale(length);
 			}
 		}else { // for computer paddle side
-        if(computer.isMovingUp()) {
-            newVec.normalize();
-            if(vec.y > 0)      newVec.y *= 2.0f;
-            else if(vec.y < 0) newVec.y *= 0.5f;
-            newVec.scale(length);
-        }
-        else if(computer.isMovingDown()) {
-            newVec.normalize();
-            if(vec.y > 0)      newVec.y *= 0.5f;
-            else if(vec.y < 0) newVec.y *= 2.0f;
-            newVec.scale(length);
-        }
-    }
-    return newVec;
-}
+			if(computer.isMovingUp()) {
+				newVec.normalize();
+				if(vec.y > 0)      newVec.y *= 2.0f;
+				else if(vec.y < 0) newVec.y *= 0.5f;
+				newVec.scale(length);
+			}
+			else if(computer.isMovingDown()) {
+				newVec.normalize();
+				if(vec.y > 0)      newVec.y *= 0.5f;
+				else if(vec.y < 0) newVec.y *= 2.0f;
+				newVec.scale(length);
+			}
+		}
+		return newVec;
+	}
 
-    /**Draw the ball.**/
-    private void drawBall(GL2 gl)
-    {
-        // get position and color of ball
-        Vector2 center = ball.getPosition();
-        float radius = ball.getRadius();
-        Color color = ball.getColor();
+	/**Draw the ball.**/
+	private void drawBall(GL2 gl)
+	{
+		// get position and color of ball
+		Vector2 center = ball.getPosition();
+		float radius = ball.getRadius();
+		Color color = ball.getColor();
 
-        // draw 360 triangles
-        gl.glColor3f(color.red, color.green, color.blue);
-        gl.glBegin(GL.GL_TRIANGLE_FAN);
-        gl.glVertex2f(center.x, center.y);
-        for(int angle = 0; angle < 360; angle++){
+		// draw 360 triangles
+		gl.glColor3f(color.red, color.green, color.blue);
+		gl.glBegin(GL.GL_TRIANGLE_FAN);
+		gl.glVertex2f(center.x, center.y);
+		for(int angle = 0; angle < 360; angle++){
 			gl.glVertex2f(center.x + (float)Math.sin(angle) * radius, center.y + (float)Math.cos(angle) * radius);
 		}
-        gl.glEnd();
-    }
+		gl.glEnd();
+	}
 
-    /**Draw the paddles.**/
-    private void drawPaddles(GL2 gl, Paddle p)
-    {
-        // get position and color
-        Vector2 center = p.getPosition();
-        float offsetX = p.getWidth() / 2.0f;
-        float offsetY = p.getHeight() / 2.0f;
-        Color color = p.getColor();
+	/**Draw the paddles.**/
+	private void drawPaddles(GL2 gl, Paddle p)
+	{
+		// get position and color
+		Vector2 center = p.getPosition();
+		float offsetX = p.getWidth() / 2.0f;
+		float offsetY = p.getHeight() / 2.0f;
+		Color color = p.getColor();
 
-        // draw player's paddle
-        gl.glColor3f(color.red, color.green, color.blue);
-        gl.glBegin(GL.GL_TRIANGLES);
-        gl.glVertex2f(center.x - offsetX, center.y - offsetY);
-        gl.glVertex2f(center.x + offsetX, center.y - offsetY);
-        gl.glVertex2f(center.x + offsetX, center.y + offsetY);
-        gl.glVertex2f(center.x - offsetX, center.y - offsetY);
-        gl.glVertex2f(center.x + offsetX, center.y + offsetY);
-        gl.glVertex2f(center.x - offsetX, center.y + offsetY);
-        gl.glEnd();
-    }
+		// draw player's paddle
+		gl.glColor3f(color.red, color.green, color.blue);
+		gl.glBegin(GL.GL_TRIANGLES);
+		gl.glVertex2f(center.x - offsetX, center.y - offsetY);
+		gl.glVertex2f(center.x + offsetX, center.y - offsetY);
+		gl.glVertex2f(center.x + offsetX, center.y + offsetY);
+		gl.glVertex2f(center.x - offsetX, center.y - offsetY);
+		gl.glVertex2f(center.x + offsetX, center.y + offsetY);
+		gl.glVertex2f(center.x - offsetX, center.y + offsetY);
+		gl.glEnd();
+	}
 
-    /**Draw the background.**/
-    private void drawBackground(GL2 gl)
-    {
-        gl.glLineWidth(10);
-        gl.glColor3f(1.0f, 1.0f, 1.0f);
+	/**Draw the background.**/
+	private void drawBackground(GL2 gl)
+	{
+		gl.glLineWidth(10);
+		gl.glColor3f(1.0f, 1.0f, 1.0f);
 
-        // bottom line
-        gl.glBegin(GL.GL_LINES);
-        gl.glVertex2f(0, 0);
-        gl.glVertex2f(SCREEN_WIDTH, 0);
-        gl.glEnd();
+		// bottom line
+		gl.glBegin(GL.GL_LINES);
+		gl.glVertex2f(0, 0);
+		gl.glVertex2f(SCREEN_WIDTH, 0);
+		gl.glEnd();
 
-        // top line
-        gl.glBegin(GL.GL_LINES);
-        gl.glVertex2f(0, SCREEN_HEIGHT);
-        gl.glVertex2f(SCREEN_WIDTH, SCREEN_HEIGHT);
-        gl.glEnd();
+		// top line
+		gl.glBegin(GL.GL_LINES);
+		gl.glVertex2f(0, SCREEN_HEIGHT);
+		gl.glVertex2f(SCREEN_WIDTH, SCREEN_HEIGHT);
+		gl.glEnd();
 
-        // center dotted line
-        final int DOT_LENGTH = 10;
-        gl.glLineWidth(2);
-        gl.glBegin(GL.GL_LINES);
-        for(int i = 0; i <= SCREEN_HEIGHT; i += DOT_LENGTH * 2)
-        {
-            gl.glVertex2f(SCREEN_WIDTH/2, i);
-            gl.glVertex2f(SCREEN_WIDTH/2, i + DOT_LENGTH);
-        }
-        gl.glEnd();
+		// center dotted line
+		final int DOT_LENGTH = 10;
+		gl.glLineWidth(2);
+		gl.glBegin(GL.GL_LINES);
+		for(int i = 0; i <= SCREEN_HEIGHT; i += DOT_LENGTH * 2)
+		{
+			gl.glVertex2f(SCREEN_WIDTH/2, i);
+			gl.glVertex2f(SCREEN_WIDTH/2, i + DOT_LENGTH);
+		}
+		gl.glEnd();
 
-        // reset line width to default 
-        gl.glLineWidth(1);
-    }
+		// reset line width to default 
+		gl.glLineWidth(1);
+	}
 
-    /**Draw the scores.**/
-    private void drawScores()
+	/**Draw the scores.**/
+	private void drawScores()
 	{
 		String score;
 
@@ -443,125 +443,125 @@ public class Pong implements GLEventListener, KeyListener
 		textRenderer.endRendering();
 	}
 
-    /**Draw a message.**/
-    private void drawMessage()
-    {
+	/**Draw a message.**/
+	private void drawMessage()
+	{
 		if(gameState != GameState.MENU)	return;
 
-        String message = "Press Space to start";
+		String message = "Press Space to start";
 
-        // compute text bounds to draw text at the center of screen
-        Rectangle2D rect = textRenderer.getBounds(message);
+		// compute text bounds to draw text at the center of screen
+		Rectangle2D rect = textRenderer.getBounds(message);
 
-        textRenderer.beginRendering(SCREEN_WIDTH, SCREEN_HEIGHT);
-        textRenderer.setColor(1, 0, 0, 1.0f);
-        textRenderer.draw(message,
-                          (int)(SCREEN_WIDTH/2.0 - rect.getCenterX()),
-                          (int)(SCREEN_HEIGHT/2.0 - rect.getCenterY()));
+		textRenderer.beginRendering(SCREEN_WIDTH, SCREEN_HEIGHT);
+		textRenderer.setColor(1, 0, 0, 1.0f);
+		textRenderer.draw(message,
+				(int)(SCREEN_WIDTH/2.0 - rect.getCenterX()),
+				(int)(SCREEN_HEIGHT/2.0 - rect.getCenterY()));
 
 		textRenderer.setColor(0, 0, 1, 1.0f);
 		if(playerScore > computerScore)
-            textRenderer.draw("You Won.", 250, 400);
-        else if(playerScore < computerScore)
-            textRenderer.draw("You Lose.", 250, 400);
+			textRenderer.draw("You Won.", 250, 400);
+		else if(playerScore < computerScore)
+			textRenderer.draw("You Lose.", 250, 400);
 
-        textRenderer.endRendering();
-    }
+		textRenderer.endRendering();
+	}
 
-    ///////////////////////////////////////////////////////////////////////////
-    // Methods for the implementation of GLEventListener
-    ///////////////////////////////////////////////////////////////////////////
-    public void init(GLAutoDrawable drawable)
-    {
-        ((Component)drawable).addKeyListener(this);
+	///////////////////////////////////////////////////////////////////////////
+	// Methods for the implementation of GLEventListener
+	///////////////////////////////////////////////////////////////////////////
+	public void init(GLAutoDrawable drawable)
+	{
+		((Component)drawable).addKeyListener(this);
 
-        // init OpenGL
-        GL2 gl = drawable.getGL().getGL2();
-        gl.glShadeModel(GLLightingFunc.GL_SMOOTH);
-        gl.glClearColor(0.1f, 0.1f, 0.1f, 0.0f); //change background color
-        gl.glClearDepth(1.0f);
-        gl.glEnable(GL.GL_DEPTH_TEST);
-        gl.glDepthFunc(GL.GL_LEQUAL);
-        gl.glHint(GL2ES1.GL_PERSPECTIVE_CORRECTION_HINT, GL.GL_NICEST);
-    }
+		// init OpenGL
+		GL2 gl = drawable.getGL().getGL2();
+		gl.glShadeModel(GLLightingFunc.GL_SMOOTH);
+		gl.glClearColor(0.1f, 0.1f, 0.1f, 0.0f); //change background color
+		gl.glClearDepth(1.0f);
+		gl.glEnable(GL.GL_DEPTH_TEST);
+		gl.glDepthFunc(GL.GL_LEQUAL);
+		gl.glHint(GL2ES1.GL_PERSPECTIVE_CORRECTION_HINT, GL.GL_NICEST);
+	}
 
-    public void reshape(GLAutoDrawable drawable, int x, int y, int w, int h)
-    {
-        GL2 gl = drawable.getGL().getGL2();
+	public void reshape(GLAutoDrawable drawable, int x, int y, int w, int h)
+	{
+		GL2 gl = drawable.getGL().getGL2();
 
-        // remember current window dimension
-        screenWidth = w;
-        screenHeight = h;
+		// remember current window dimension
+		screenWidth = w;
+		screenHeight = h;
 
-        gl.glViewport(0, 0, w, h);
+		gl.glViewport(0, 0, w, h);
 
-        gl.glMatrixMode(GLMatrixFunc.GL_PROJECTION);
-        gl.glLoadIdentity();
-        gl.glOrtho(0, SCREEN_WIDTH, 0, SCREEN_HEIGHT, -1, 1);
+		gl.glMatrixMode(GLMatrixFunc.GL_PROJECTION);
+		gl.glLoadIdentity();
+		gl.glOrtho(0, SCREEN_WIDTH, 0, SCREEN_HEIGHT, -1, 1);
 
-        gl.glMatrixMode(GLMatrixFunc.GL_MODELVIEW);
-        gl.glLoadIdentity();
-    }
+		gl.glMatrixMode(GLMatrixFunc.GL_MODELVIEW);
+		gl.glLoadIdentity();
+	}
 
-    public void display(GLAutoDrawable drawable)
-    {
-        // get frameTime
-        frameTime = getFrameTime();
-        gameTime += frameTime;
+	public void display(GLAutoDrawable drawable)
+	{
+		// get frameTime
+		frameTime = getFrameTime();
+		gameTime += frameTime;
 
-        // update scene before drawing
-        update();
+		// update scene before drawing
+		update();
 
-        // draw scene
-        drawFrame(drawable);
-    }
+		// draw scene
+		drawFrame(drawable);
+	}
 
-    public void dispose(GLAutoDrawable gLDrawable)
-    {
-    }
+	public void dispose(GLAutoDrawable gLDrawable)
+	{
+	}
 
-    ///////////////////////////////////////////////////////////////////////////
-    // Methods required for the implementation of KeyListener
-    ///////////////////////////////////////////////////////////////////////////
-    public void keyPressed(KeyEvent e)
-    {
-        switch(e.getKeyCode())
-        {
-            case KeyEvent.VK_ESCAPE:
-                System.out.println("Escape key is pressed. Exiting Pong...");
-                exit();
-                break;
+	///////////////////////////////////////////////////////////////////////////
+	// Methods required for the implementation of KeyListener
+	///////////////////////////////////////////////////////////////////////////
+	public void keyPressed(KeyEvent e)
+	{
+		switch(e.getKeyCode())
+		{
+			case KeyEvent.VK_ESCAPE:
+				System.out.println("Escape key is pressed. Exiting Pong...");
+				exit();
+				break;
+	
+			case KeyEvent.VK_UP:
+				player.setMovingUp(true);
+				break;
+	
+			case KeyEvent.VK_DOWN:
+				player.setMovingDown(true);
+				break;
+		}
+	}
 
-            case KeyEvent.VK_UP:
-                player.setMovingUp(true);
-                break;
-                
-            case KeyEvent.VK_DOWN:
-                player.setMovingDown(true);
-                break;
-        }
-    }
+	public void keyReleased(KeyEvent e)
+	{
+		switch(e.getKeyCode())
+		{
+			case KeyEvent.VK_SPACE:
+				setGameState(GameState.START);
+				//System.out.println("Space key is up.");
+				break;
+	
+			case KeyEvent.VK_UP:
+				player.setMovingUp(false);
+				break;
+	
+			case KeyEvent.VK_DOWN:
+				player.setMovingDown(false);
+				break;
+		}
+	}
 
-    public void keyReleased(KeyEvent e)
-    {
-        switch(e.getKeyCode())
-        {
-            case KeyEvent.VK_SPACE:
-            	setGameState(GameState.START);
-            //System.out.println("Space key is up.");
-                break;
-                
-                case KeyEvent.VK_UP:
-                player.setMovingUp(false);
-                break;
-                
-            case KeyEvent.VK_DOWN:
-                player.setMovingDown(false);
-                break;
-        }
-    }
-
-    public void keyTyped(KeyEvent e)
-    {
-    }
+	public void keyTyped(KeyEvent e)
+	{
+	}
 }
