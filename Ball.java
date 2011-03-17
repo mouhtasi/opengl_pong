@@ -35,7 +35,7 @@ public class Ball
 		return radius;
 	}
 
-	/**Set the position of the ball to doubles x and y.**/
+	/**Set the position of the ball to x and y.**/
 	public void setPosition(double x, double y)
 	{
 		position.set(x, y);
@@ -74,7 +74,7 @@ public class Ball
 		System.out.println(this);
 	}
 
-	/**Fire the ball from it's current position at the given speed.
+	/**Fire the ball from its current position at the given speed.
 	Will either shoot towards the player or the computer.**/
 	public void fire(double x, double y, double speed)
 	{

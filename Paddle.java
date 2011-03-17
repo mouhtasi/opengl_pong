@@ -27,7 +27,7 @@ public class Paddle
 		position.set(vec);
 	}
 
-	/**Set the color to rgb values r, g, b.**/
+	/**Set the color to RGB values r, g, b.**/
 	public void setColor(float r, float g, float b)
 	{
 		color.set(r, g, b);
@@ -39,25 +39,25 @@ public class Paddle
 		color.set(c);
 	}
 
-	/**Set the speed to double speed.**/
+	/**Set the speed to specified speed.**/
 	public void setSpeed(double speed)
 	{
 		this.speed = speed;
 	}
 
-	/**Set the width to double width.**/
+	/**Set the width to specified width.**/
 	public void setWidth(double width)
 	{
 		this.width = width;
 	}
 
-	/**Set the height to double height.**/
+	/**Set the height to specified height.**/
 	public void setHeight(double height)
 	{
 		this.height = height;
 	}
 
-	/**Return the position**/
+	/**Return the position.**/
 	public Vector2 getPosition()
 	{
 		return position.get();
@@ -134,7 +134,7 @@ public class Paddle
 		maxY = max;
 	}
 
-	/**Update the data  for the paddle.**/
+	/**Update the data for the paddle.**/
 	public void update(double deltaTime)
 	{
 		if(movingUp)

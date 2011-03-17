@@ -11,19 +11,19 @@ public class Color
 		set(1, 1, 1);
 	}
 
-	/**Create a new Color object with rgb values r, g, b.**/
+	/**Create a new Color object with RGB values r, g, b.**/
 	public Color(float r, float g, float b)
 	{
 		set(r, g, b);
 	}
 
-	/**Create a new Color object with rgb values of Color object c.**/
+	/**Create a new Color object with RGB values of Color object c.**/
 	public Color(Color c)
 	{
 		this(c.red, c.green, c.blue);   // call another ctor
 	}
 
-	/**Set the color to rgb values r, g, b.**/
+	/**Set the color to RGB values r, g, b.**/
 	public void set(float r, float g, float b)
 	{
 		// clamp before assign
@@ -32,7 +32,7 @@ public class Color
 		blue = clamp(b);
 	}
 
-	/**Set the color to the rgb values from Color object c.**/
+	/**Set the color to the RGB values from Color object c.**/
 	public void set(Color c)
 	{
 		set(c.red, c.green, c.blue);
@@ -51,7 +51,7 @@ public class Color
 		                     red, green, blue);
 	}
 
-	/**Print the rgb values.**/
+	/**Print the RGB values.**/
 	public void printSelf()
 	{
 		System.out.println(this);
