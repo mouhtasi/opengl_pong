@@ -16,11 +16,11 @@ public class Pong implements GLEventListener, KeyListener
 	// constants
 	private static final int SCREEN_WIDTH = 800;
 	private static final int SCREEN_HEIGHT = 600;
-	private static final int FPS = 120;              //frames per second
-	private static final double PADDLE_SPEED = 400;   //default paddle speed
-	private static final int MAX_SCORE = 10;         //game restarts when either player reaches this score
+	private static final int FPS = 120;              // frames per second
+	private static final double PADDLE_SPEED = 400;   // default paddle speed
+	private static final int MAX_SCORE = 10;         // game restarts when either player reaches this score
 	private static final double READY_TIME = 1.0;
-	private static final int BALL_RADIUS = 5;        //radius of the ball
+	private static final int BALL_RADIUS = 5;        // radius of the ball
 
 	// static vars
 	private static GLCanvas canvas;
@@ -29,7 +29,7 @@ public class Pong implements GLEventListener, KeyListener
 	private static GLU glu;
 	private static Frame frame;
 	private static double AI_UPDATE_TIME = 1.5;
-	private static double BALL_SPEED = 300;    //default ball speed
+	private static double BALL_SPEED = 300;    // default ball speed
 
 	// instance vars
 	private double gameTime;     // sec
@@ -46,7 +46,7 @@ public class Pong implements GLEventListener, KeyListener
 	private Paddle computer;
 
 	private TextRenderer textRenderer;
-	private SoundPlayer sound = new SoundPlayer(); /// for sound effects
+	private SoundPlayer sound = new SoundPlayer(); // for sound effects
 	private int playerScore = 0;
 	private int computerScore = 0;
 
@@ -78,14 +78,14 @@ public class Pong implements GLEventListener, KeyListener
 		ball = new Ball();
 		ball.setPosition(SCREEN_WIDTH/2.0, SCREEN_HEIGHT/2.0);
 		ball.setRadius(BALL_RADIUS);
-		ball.setColor(0.2f, 1, 0.2f);    //color green
+		ball.setColor(0.2f, 1, 0.2f);    // color green
 
 		// paddle for player
 		player = new Paddle();
 		player.setPosition(10.0, SCREEN_HEIGHT/2.0);
 		player.setWidth(10);
 		player.setHeight(70);
-		player.setColor(1, 0.2f, 0.2f);    //color red
+		player.setColor(1, 0.2f, 0.2f);    // color red
 		player.setSpeed(PADDLE_SPEED);
 		player.setBounds(player.getHeight()/2, SCREEN_HEIGHT - player.getHeight()/2);
 
@@ -94,7 +94,7 @@ public class Pong implements GLEventListener, KeyListener
 		computer.setPosition(SCREEN_WIDTH-10.0, SCREEN_HEIGHT/2.0);
 		computer.setWidth(10);
 		computer.setHeight(70);
-		computer.setColor(0.2f, 0.2f, 1);    //color blue
+		computer.setColor(0.2f, 0.2f, 1);    // color blue
 		computer.setSpeed(PADDLE_SPEED);
 		computer.setBounds(player.getHeight()/2, SCREEN_HEIGHT - computer.getHeight()/2);
 	}
@@ -124,17 +124,17 @@ public class Pong implements GLEventListener, KeyListener
 		});
 		frame.setVisible(true);
 
-		//config canvas
+		// config canvas
 		canvas.addGLEventListener(this);
 		canvas.requestFocus();
 
-		//create a text renderer
+		// create a text renderer
 		textRenderer = new TextRenderer(new Font("Dialog", Font.BOLD, 60));
 
-		//start animator
+		// start animator
 		animator.start();
 
-		//debug
+		// debug
 		System.out.println("Initialized JOGL.");
 	}
 
@@ -152,7 +152,7 @@ public class Pong implements GLEventListener, KeyListener
 	private double getFrameTime()
 	{
 		long currTime = System.nanoTime();
-		double deltaTime = (currTime - prevTime) / 1000000000.0; //nanosec to sec
+		double deltaTime = (currTime - prevTime) / 1000000000.0; // nanosec to sec
 		prevTime = currTime;
 		return deltaTime;
 	}
@@ -163,8 +163,8 @@ public class Pong implements GLEventListener, KeyListener
 		gameState = state;
 		if(state == GameState.START){
 			playerScore = computerScore = 0;
-			AI_UPDATE_TIME = 1.0;    //reset AI
-			BALL_SPEED = 300;    //reset ball speed
+			AI_UPDATE_TIME = 1.0;    // reset AI
+			BALL_SPEED = 300;    // reset ball speed
 			ball.setPosition(SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
 			ball.setVelocity(0, 0);
 			setGameState(GameState.READY);
@@ -187,10 +187,10 @@ public class Pong implements GLEventListener, KeyListener
 		}
 
 		//System.out.println(frameTime);
-		ball.update(frameTime);        //updates the ball
-		player.update(frameTime);      //updates the player paddle
-		computer.update(frameTime);    //updates the computer paddle
-		updateAI();                    //updates the AI
+		ball.update(frameTime);        // updates the ball
+		player.update(frameTime);      // updates the player paddle
+		computer.update(frameTime);    // updates the computer paddle
+		updateAI();                    // updates the AI
 
 		int hit = hitTest();
 		if(hit == 1) sound.play("blip01.wav");
@@ -198,12 +198,12 @@ public class Pong implements GLEventListener, KeyListener
 		else if(hit == 3){
 			sound.play("blip03.wav");
 			if(playerScore >= MAX_SCORE || computerScore >= MAX_SCORE){
-				//game ends when either player reaches MAX_SCORE
+				// game ends when either player reaches MAX_SCORE
 				setGameState(GameState.MENU);
 			}else{
-				//shoot the next ball
-				AI_UPDATE_TIME *= 0.5;     //increase refresh speed of AI
-				BALL_SPEED += 20;			//increase speed of ball
+				// shoot the next ball
+				AI_UPDATE_TIME *= 0.5;     // increase refresh speed of AI
+				BALL_SPEED += 20;			// increase speed of ball
 				setGameState(GameState.READY);
 			}
 		}
@@ -306,8 +306,8 @@ public class Pong implements GLEventListener, KeyListener
 
 		// draw scene
 		drawBackground(gl);
-		drawPaddles(gl, player);    //draw player paddle
-		drawPaddles(gl, computer);  //draw computer paddle
+		drawPaddles(gl, player);    // draw player paddle
+		drawPaddles(gl, computer);  // draw computer paddle
 		drawBall(gl);
 
 		// draw text
