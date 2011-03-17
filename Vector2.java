@@ -47,28 +47,25 @@ public class Vector2
 		System.out.println(this);
 	}
 
-	/**Return a vector that is the sum of two vectors.**/
-	public Vector2 add(Vector2 rhs)
+	/**Add rhs to this vector.**/
+	public void add(Vector2 rhs)
 	{
 		x += rhs.x;
 		y += rhs.y;
-		return new Vector2(this);
 	}
 
-	/**Return a vector that is the difference between two vectors.**/
-	public Vector2 subtract(Vector2 rhs)
+	/**Subtract rhs from this vector.**/
+	public void subtract(Vector2 rhs)
 	{
 		x -= rhs.x;
 		y -= rhs.y;
-		return new Vector2(this);
 	}
 
-	/**Return a vector that has been scaled to 'scalar'.**/
-	public Vector2 scale(double scalar)
+	/**Scale this vector by 'scalar'.**/
+	public void scale(double scalar)
 	{
 		x *= scalar;
 		y *= scalar;
-		return new Vector2(x, y);
 	}
 
 	/**Return the dot product of coordinates for Vector2 object rhs.**/
